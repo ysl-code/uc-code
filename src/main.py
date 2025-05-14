@@ -62,7 +62,7 @@ def parse_command(params, key, default):
 if __name__ == '__main__':
     th.autograd.set_detect_anomaly(True)
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-    for seed_i in [421267113, 534389330, 909443255,369301872,337224388]: # #337224388, 421267113, 369301872,  #[909443255, 534389330, 369301872, 421267113, 337224388]:#[909443255]:
+    for seed_i in [421267113]: #
         SETTINGS['CAPTURE_MODE'] = "fd"  # fd# set to "no" if you want to see stdout/stderr in console
         logger = get_logger()
 
@@ -79,8 +79,6 @@ if __name__ == '__main__':
             config = config_copy(_config)
 
             config["seed"] = seed_i
-            # 337224388 #534389330 #421267113 #369301872 #909443255
-            # 421267113 #369301872 #909443255 #337224388 #534389330
             np.random.seed(config["seed"])
             th.manual_seed(config["seed"])
             config['env_args']['seed'] = config["seed"]
