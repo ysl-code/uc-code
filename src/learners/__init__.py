@@ -9,7 +9,9 @@ from .max_q_learner import MAXQLearner
 from .dmaq_qatten_learner import DMAQ_qattenLearner
 from .offpg_learner import OffPGLearner
 from .fmac_learner import FMACLearner
-
+from .mcga_nq_learner import MCGA_NQLearner
+from .cola_learner import COLALearner
+from .ducc_nq_learner import DUCC_NQLearner
 
 REGISTRY = {}
 
@@ -24,3 +26,9 @@ REGISTRY["max_q_learner"] = MAXQLearner
 REGISTRY["dmaq_qatten_learner"] = DMAQ_qattenLearner
 REGISTRY["offpg_learner"] = OffPGLearner
 REGISTRY["fmac_learner"] = FMACLearner
+REGISTRY["mcga_nq_learner"] = MCGA_NQLearner
+REGISTRY["cola_learner"] = COLALearner
+REGISTRY["ducc_nq_learner"] = DUCC_NQLearner
+
+from .uc_learner import UCLearner
+REGISTRY["uc_learner"] = UCLearner
