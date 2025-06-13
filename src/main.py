@@ -13,6 +13,8 @@ import yaml
 
 from run import REGISTRY as run_REGISTRY
 
+import random
+
 
 
 def _get_config(params, arg_name, subfolder):
@@ -60,9 +62,8 @@ def parse_command(params, key, default):
 
 
 if __name__ == '__main__':
-    th.autograd.set_detect_anomaly(True)
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-    for seed_i in [421267113]: #
+    for seed_i in [909443255, 534389330, 369301872, 421267113, 337224388]:  #[272501477, 800854527, 684568623, 607007545]:#[909443255, 534389330, 369301872, 421267113, 337224388]:#[909443255]:
         SETTINGS['CAPTURE_MODE'] = "fd"  # fd# set to "no" if you want to see stdout/stderr in console
         logger = get_logger()
 
@@ -79,9 +80,30 @@ if __name__ == '__main__':
             config = config_copy(_config)
 
             config["seed"] = seed_i
+            # 337224388 #534389330 #421267113 #369301872 #909443255
+            # 421267113 #369301872 #909443255 #337224388 #534389330
             np.random.seed(config["seed"])
             th.manual_seed(config["seed"])
             config['env_args']['seed'] = config["seed"]
+
+            if config['env'] == 'mpe_env':
+                assert config['scenario_name'] in ['simple_tag', 'simple_world', 'simple_adversary', 'simple_crypto']
+
+                config['target_update_interval'] = 800
+                if config['scenario_name'] in ['simple_tag', 'simple_world']:
+                    config['res_lambda'] = 0.05
+                elif config['scenario_name'] in ['simple_adversary']:
+                    config['res_lambda'] = 0.5
+                elif config['scenario_name'] in ['simple_crypto']:
+                    config['res_lambda'] = 0.01
+            '''else:
+                assert config['env_args']['map_name'] in ['2s3z', '3s5z', '2c_vs_64zg', 'MMM2']
+
+                config['res_beta'] = 5.0
+                if config['env_args']['map_name'] in ['2s3z', '3s5z', '2c_vs_64zg']:
+                    config['res_lambda'] = 0.05
+                elif config['env_args']['map_name'] in ['MMM2']:
+                    config['res_lambda'] = 0.01'''
 
             # run
             if "use_per" in _config and _config["use_per"]:
@@ -91,9 +113,35 @@ if __name__ == '__main__':
 
 
         #params = deepcopy(sys.argv)
-        params = ['~/src/main.py', '--config=uc', '--env-config=sc2', 'with', 'env_args.map_name=5m_vs_6m',
-                  't_max=2025000',
-                  'save_model=True', 'use_tensorboard=True']  #'epsilon_anneal_time=500000','td_lambda=0.3',
+        params = ['~/src/main.py', '--config=ducc', '--env-config=foraging_1', 'with',
+                  't_max=2025000', 'save_model=True', 'use_tensorboard=True']  #qplex
+
+        '''params = ['~/src/main.py', '--config=mcga', '--env-config=dec_tiger', 'with',
+                  'env_args.map_name=dec_tiger', 't_max=1025000','save_model=True', 'use_tensorboard=True']'''
+
+        '''params = ['~/src/main.py', '--config=ducc', '--env-config=mpe_env',
+                  'with', 'scenario_name=simple_tag', 't_max=2025000',
+                  'save_model=True', 'use_tensorboard=True']'''
+
+        '''params = ['~/src/main.py', '--config=ducc', '--env-config=sc2', 'with',
+                  'env_args.map_name=5m_vs_6m', 'save_model=True', 'use_tensorboard=True']'''
+
+        '''params = ['~src/main.py', '--config=qmix', '--env-config=gather', 'with',
+                  'save_model=True', 'use_tensorboard=True']'''
+
+        '''params = ['~/桌面/pymarl2-maste_serial/src/main.py', '--config=qmix', '--env-config=academy_3_vs_1_with_keeper', 'with',
+                  'save_model=True', 'use_tensorboard=True']'''
+
+        #academy_3_vs_1_with_keeper
+        #academy_counterattack_easy
+        #academy_pass_and_shoot_with_keeper
+
+        #src/main.py --config=vdn_gfootball --env-config=gfootball with env_args.map_name=academy_counterattack_hard env_args.num_agents=4
+        '''params = ['~/桌面/pymarl2-master/src/main.py', '--config=qmix_predator_prey', '--env-config=stag_hunt', 'with', 'env_args.map_name=stag_hunt',
+                  'save_model=True', 'use_tensorboard=True']
+        params = ['~/桌面/pymarl2-master/src/main.py', '--config=qmix',
+                  '--env-config=one_step_matrix_game', 'with', #'env_args.map_name=stag_hunt',
+                  'save_model=True', 'use_tensorboard=True']'''
 
         # Get the defaults from default.yaml
         with open(os.path.join(os.path.dirname(__file__), "config", "default.yaml"), "r") as f:
@@ -111,7 +159,7 @@ if __name__ == '__main__':
         # now add all the config to sacred
         ex.add_config(config_dict)
 
-        # Save to disk by default for sacred
+        '''# Save to disk by default for sacred
         map_name = parse_command(params, "env_args.map_name", config_dict['env_args']['map_name'])
         algo_name = parse_command(params, "name", config_dict['name'])
         file_obs_path = join(results_path, "sacred", map_name, algo_name)
@@ -119,6 +167,12 @@ if __name__ == '__main__':
         logger.info("Saving to FileStorageObserver in {}.".format(file_obs_path))
         ex.observers.append(FileStorageObserver.create(file_obs_path))
 
+        ex.run_commandline(params)'''
+
+        # Save to disk by default for sacred
+        logger.info("Saving to FileStorageObserver in results/sacred.")
+        file_obs_path = os.path.join(results_path, "sacred")
+        ex.observers.append(FileStorageObserver.create(file_obs_path))
         ex.run_commandline(params)
 
         # flush
