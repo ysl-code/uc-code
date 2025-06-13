@@ -63,7 +63,7 @@ def parse_command(params, key, default):
 
 if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-    for seed_i in [909443255, 534389330, 369301872, 421267113, 337224388]:  #[272501477, 800854527, 684568623, 607007545]:#[909443255, 534389330, 369301872, 421267113, 337224388]:#[909443255]:
+    for seed_i in [909443255]:  
         SETTINGS['CAPTURE_MODE'] = "fd"  # fd# set to "no" if you want to see stdout/stderr in console
         logger = get_logger()
 
@@ -80,8 +80,6 @@ if __name__ == '__main__':
             config = config_copy(_config)
 
             config["seed"] = seed_i
-            # 337224388 #534389330 #421267113 #369301872 #909443255
-            # 421267113 #369301872 #909443255 #337224388 #534389330
             np.random.seed(config["seed"])
             th.manual_seed(config["seed"])
             config['env_args']['seed'] = config["seed"]
@@ -116,32 +114,11 @@ if __name__ == '__main__':
         params = ['~/src/main.py', '--config=ducc', '--env-config=foraging_1', 'with',
                   't_max=2025000', 'save_model=True', 'use_tensorboard=True']  #qplex
 
-        '''params = ['~/src/main.py', '--config=mcga', '--env-config=dec_tiger', 'with',
-                  'env_args.map_name=dec_tiger', 't_max=1025000','save_model=True', 'use_tensorboard=True']'''
+       
 
-        '''params = ['~/src/main.py', '--config=ducc', '--env-config=mpe_env',
-                  'with', 'scenario_name=simple_tag', 't_max=2025000',
-                  'save_model=True', 'use_tensorboard=True']'''
-
-        '''params = ['~/src/main.py', '--config=ducc', '--env-config=sc2', 'with',
-                  'env_args.map_name=5m_vs_6m', 'save_model=True', 'use_tensorboard=True']'''
-
-        '''params = ['~src/main.py', '--config=qmix', '--env-config=gather', 'with',
-                  'save_model=True', 'use_tensorboard=True']'''
-
-        '''params = ['~/桌面/pymarl2-maste_serial/src/main.py', '--config=qmix', '--env-config=academy_3_vs_1_with_keeper', 'with',
-                  'save_model=True', 'use_tensorboard=True']'''
-
-        #academy_3_vs_1_with_keeper
-        #academy_counterattack_easy
-        #academy_pass_and_shoot_with_keeper
 
         #src/main.py --config=vdn_gfootball --env-config=gfootball with env_args.map_name=academy_counterattack_hard env_args.num_agents=4
-        '''params = ['~/桌面/pymarl2-master/src/main.py', '--config=qmix_predator_prey', '--env-config=stag_hunt', 'with', 'env_args.map_name=stag_hunt',
-                  'save_model=True', 'use_tensorboard=True']
-        params = ['~/桌面/pymarl2-master/src/main.py', '--config=qmix',
-                  '--env-config=one_step_matrix_game', 'with', #'env_args.map_name=stag_hunt',
-                  'save_model=True', 'use_tensorboard=True']'''
+        
 
         # Get the defaults from default.yaml
         with open(os.path.join(os.path.dirname(__file__), "config", "default.yaml"), "r") as f:
